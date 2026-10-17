@@ -46,7 +46,7 @@ outputs/figures/    figures
 Requires R (4.3 or later) and Quarto.
 
 ```r
-install.packages(c("cansim", "dplyr", "lubridate", "fixest", "ggplot2", "renv"))
+install.packages(c("cansim", "dplyr", "lubridate", "stringr", "fixest", "broom", "ggplot2", "renv"))
 renv::init()   # first time only, then commit renv.lock
 
 source("R/01_download.R")
