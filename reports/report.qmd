@@ -1,0 +1,42 @@
+---
+title: "Did BC's Foreign Buyers' Tax change new-home prices in Vancouver?"
+author: "Luis Alonso Alvarez Portugal"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: true
+---
+
+## Question
+
+TODO: one paragraph. What changed on 2 August 2016, and what is the causal question?
+
+## Data
+
+TODO: NHPI source (Statistics Canada 18-10-0205-01), coverage, and the limitation that it measures new housing only.
+
+## Design
+
+TODO: treated and control CMAs, window, why Victoria and Ontario are excluded, parallel-trends assumption.
+
+## Results
+
+```{r}
+#| eval: false
+knitr::include_graphics("../outputs/figures/event_study_main.png")
+```
+
+TODO: pre-trend check first, then post-period effect.
+
+## Threats to validity
+
+TODO: Alberta downturn, federal stress test, few clusters, new vs resale.
+
+## Robustness
+
+TODO: alternative controls, shorter window, placebo date, small-sample inference.
+
+## Takeaway
+
+TODO: what the evidence supports, and what it does not.
