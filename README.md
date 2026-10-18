@@ -2,7 +2,7 @@
 
 A difference-in-differences / event-study analysis of the 15% Foreign Buyers' Tax that British Columbia introduced in Metro Vancouver on 2 August 2016.
 
-This is a small, weekend-sized portfolio project. The goal is a clearly stated causal question, a defensible design, and honest reporting of what the data can and cannot say.
+ The goal is a clearly stated causal question, a defensible design, and honest reporting of what the data can and cannot say.
 
 ## Question
 
@@ -10,12 +10,19 @@ What was the effect of the 2016 Foreign Buyers' Tax (FBT) on new-home prices in 
 
 ## Design
 
-- **Outcome:** log of the New Housing Price Index (NHPI), monthly, by CMA. Source: Statistics Canada, table 18-10-0205-01, pulled with the `cansim` R package.
-- **Treated unit:** Vancouver CMA.
+- **Outcome:** log of the New Housing Price Index (NHPI), monthly, by CMA. The NHPI is a Statistics Canada index of what builders charge for new homes (house and land), with a fixed base period equal to 100. Source: table 18-10-0205-01, pulled with the `cansim` R package.
+- **Treated unit:** Vancouver CMA. A CMA (Census Metropolitan Area) is Statistics Canada's definition of a metro area: a large city plus the surrounding municipalities that are economically tied to it.
 - **Controls:** CMAs outside BC and Ontario (Calgary, Edmonton, Saskatoon, Regina, Winnipeg, Halifax, and similar; the exact set is defined in `R/02_clean.R`).
 - **Window:** January 2013 to March 2017. This ends before Ontario's own foreign buyers' tax (April 2017), so Toronto-area and other Ontario CMAs are excluded and the controls stay clean.
 - **Excluded on purpose:** Victoria and other BC CMAs, because the tax was extended to more BC regions in 2018 and BC-wide spillovers are plausible.
 - **Estimator:** event study with two-way fixed effects (CMA and month) using `fixest`, one coefficient per month relative to the month before the tax (reference period: July 2016).
+
+## Glossary
+
+- **FBT:** Foreign Buyers' Tax, a 15% additional property transfer tax on foreign buyers in Metro Vancouver, effective 2 August 2016.
+- **NHPI:** New Housing Price Index (new homes only, not resale).
+- **CMA:** Census Metropolitan Area.
+- **DiD:** difference-in-differences.
 
 ## Known threats to validity
 
