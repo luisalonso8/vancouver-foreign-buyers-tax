@@ -92,3 +92,34 @@ panel_bc <- panel_bc |>
 
 print(count(panel_bc, cma))
 saveRDS(panel_bc, file.path("data", "processed", "panel_bc.rds"))
+
+# ---- Extended control set (used in 05_robustness.R) --------------------------
+extended_cmas <- c(
+  control_cmas,
+  "Montréal", "Québec", "Sherbrooke", "Trois-Rivières",
+  "St. John's", "Charlottetown", "Saint John"
+)
+
+panel_extended <- nhpi |>
+  filter(cma %in% c(treated_cma, extended_cmas)) |>
+  filter(date >= window_start, date <= window_end) |>
+  mutate(
+    treated   = as.integer(cma == treated_cma),
+    alberta   = as.integer(cma %in% alberta_cmas),
+    log_nhpi  = log(value),
+    rel_month = (year(date) - year(fbt_date)) * 12 + (month(date) - month(fbt_date)),
+    post      = as.integer(rel_month >= 0)
+  ) |>
+  select(cma, date, value, log_nhpi, treated, alberta, rel_month, post)
+
+# Report valid months per CMA before dropping incomplete ones
+print(panel_extended |> group_by(cma) |> summarise(n = n(), n_valid = sum(!is.na(value))))
+
+# Keep only CMAs with a complete series in the window
+panel_extended <- panel_extended |>
+  group_by(cma) |>
+  filter(!anyNA(value)) |>
+  ungroup()
+
+print(count(panel_extended, cma))
+saveRDS(panel_extended, file.path("data", "processed", "panel_extended.rds"))
