@@ -68,3 +68,27 @@ print(count(panel, cma))
 
 saveRDS(panel, file.path("data", "processed", "panel.rds"))
 message("Saved analysis panel with ", nrow(panel), " rows.")
+
+# ---- BC-only comparison (used in 05_robustness.R) ----------------------------
+bc_cmas <- c("Victoria", "Kelowna")
+
+panel_bc <- nhpi |>
+  filter(cma %in% c(treated_cma, bc_cmas)) |>
+  filter(date >= window_start, date <= window_end) |>
+  mutate(
+    treated   = as.integer(cma == treated_cma),
+    alberta   = 0L,
+    log_nhpi  = log(value),
+    rel_month = (year(date) - year(fbt_date)) * 12 + (month(date) - month(fbt_date)),
+    post      = as.integer(rel_month >= 0)
+  ) |>
+  select(cma, date, value, log_nhpi, treated, alberta, rel_month, post)
+
+# Keep only CMAs with a complete series in the window
+panel_bc <- panel_bc |>
+  group_by(cma) |>
+  filter(!anyNA(value)) |>
+  ungroup()
+
+print(count(panel_bc, cma))
+saveRDS(panel_bc, file.path("data", "processed", "panel_bc.rds"))
