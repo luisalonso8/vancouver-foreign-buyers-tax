@@ -1,79 +1,108 @@
-# Did BC's Foreign Buyers' Tax change new-home prices in Vancouver?
+# Did BC's 2016 Foreign Buyers' Tax change new-home prices in Vancouver?
 
-A difference-in-differences / event-study analysis of the 15% Foreign Buyers' Tax that British Columbia introduced in Metro Vancouver on 2 August 2016.
+A small data project on a real policy question, using public Statistics Canada data and R.
 
- The goal is a clearly stated causal question, a defensible design, and honest reporting of what the data can and cannot say.
+## The short answer
 
-## Question
+**The data cannot tell.** Here is what they do show:
 
-What was the effect of the 2016 Foreign Buyers' Tax (FBT) on new-home prices in Vancouver, relative to comparable Canadian metro areas that did not have the tax?
+- Before the tax, new-home prices in Vancouver were rising much faster than in other Canadian cities.
+- After the tax, that rise slowed sharply: the biggest slowdown among 12 cities.
+- But Vancouver was already on a different path before the tax. A slowdown from an unusually fast pace is not the same as an effect of the tax, and the numbers are compatible with anything from a sizeable drop to a modest rise.
 
-## Design
+I report this as an inconclusive result and explain why, instead of forcing a headline.
 
-- **Outcome:** log of the New Housing Price Index (NHPI), monthly, by CMA. The NHPI is a Statistics Canada index of what builders charge for new homes (house and land), with a fixed base period equal to 100. Source: table 18-10-0205-01, pulled with the `cansim` R package.
-- **Treated unit:** Vancouver CMA. A CMA (Census Metropolitan Area) is Statistics Canada's definition of a metro area: a large city plus the surrounding municipalities that are economically tied to it.
-- **Controls:** CMAs outside BC and Ontario (Calgary, Edmonton, Saskatoon, Regina, Winnipeg, Halifax, and similar; the exact set is defined in `R/02_clean.R`).
-- **Window:** January 2013 to March 2017. This ends before Ontario's own foreign buyers' tax (April 2017), so Toronto-area and other Ontario CMAs are excluded and the controls stay clean.
-- **Excluded on purpose:** Victoria and other BC CMAs, because the tax was extended to more BC regions in 2018 and BC-wide spillovers are plausible.
-- **Estimator:** event study with two-way fixed effects (CMA and month) using `fixest`, one coefficient per month relative to the month before the tax (reference period: July 2016).
+## Background
 
-## Glossary
+On 2 August 2016, British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated aim was to help manage foreign demand while new homes were built. The question here: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
 
-- **FBT:** Foreign Buyers' Tax, a 15% additional property transfer tax on foreign buyers in Metro Vancouver, effective 2 August 2016.
-- **NHPI:** New Housing Price Index (new homes only, not resale).
-- **CMA:** Census Metropolitan Area.
-- **DiD:** difference-in-differences.
+## What the data show
 
-## Known threats to validity
+**1. Vancouver was growing much faster than other cities, then slowed.**
+Average monthly price growth in the 12 months before the tax versus the 8 months after. Vancouver (thick line) had the highest pace before and the largest slowdown after.
 
-These are stated up front, not hidden.
+![Price growth before and after the tax](outputs/figures/dot_plot_growth.png)
 
-1. **Parallel trends.** The key assumption. Pre-tax event-study coefficients are the main evidence for or against it.
-2. **Alberta's 2015-2016 oil downturn.** Calgary and Edmonton may not follow Vancouver's pre-trend. Results are shown with and without Alberta controls.
-3. **Federal mortgage stress test (October 2016).** It falls inside the post period and affects all CMAs, though not equally.
-4. **Few clusters.** With a single treated unit and a handful of controls, cluster-robust standard errors are unreliable. Inference should be supplemented with randomization or placebo-in-space tests.
-5. **NHPI measures new housing, not resale.** Results do not speak to the resale market.
+**2. The comparison cities were not a good match before the tax.**
+Each dot is the gap between Vancouver and the controls, month by month, relative to July 2016. If the two had moved in parallel, the dots before the dotted line would be flat. They are not: Vancouver was catching up for most of 2015 and 2016.
 
-## Repo layout
+![Event study](outputs/figures/event_study_main.png)
+
+**3. How much does that matter?**
+Each row asks: if Vancouver's pre-tax trend had bent by this much, what would the effect of the tax be? If the trend simply continued in a straight line, the tax looks like a small decline (about 1 to 3%). With the amount of bending seen in the data, the range runs from roughly -16% to +12%.
+
+![Sensitivity analysis](outputs/figures/honest_did.png)
+
+**4. Is Vancouver unusual compared with other cities?**
+I pretended each of the other cities had received the tax and measured the same slowdown. Vancouver's is the largest, but with only 12 cities the smallest possible p-value is 0.083.
+
+![Placebo in space](outputs/figures/placebo_space.png)
+
+## How I approached it
+
+- **Method:** difference-in-differences, in its event-study form. Vancouver's price path is compared with cities that did not get the tax, month by month, around the tax date.
+- **Data:** monthly New Housing Price Index (NHPI), Statistics Canada, Table 18-10-0205-01. January 2013 to March 2017. It covers new homes, not resale.
+- **Comparison cities:** Calgary, Edmonton, Saskatoon, Regina, Winnipeg and Halifax, extended to 11 cities in a robustness check.
+- **Why not an A/B test:** the tax already happened in one region, so assignment cannot be randomized.
+
+## What I checked
+
+| Check | Result |
+|---|---|
+| Drop Alberta (oil downturn in 2015-16) | Same pre-tax pattern |
+| Extended set of 11 comparison cities | Same pre-tax pattern |
+| Vancouver vs Victoria (descriptive) | Direction depends on which comparison city is used |
+| Sensitivity to the pre-tax trend (HonestDiD) | Effect is negative only if the trend continues in a straight line; wide range otherwise |
+| Placebo in space (12 cities) | Largest slowdown of the 12, p = 0.083 (the minimum possible); no difference in price level relative to July 2016 |
+
+## What this analysis can and cannot say
+
+**It can say:** Vancouver's price growth slowed after the tax more than in any comparison city, and the pre-tax trend was not parallel.
+
+**It cannot say:** that the tax lowered prices, or that it had no effect. Other things changed at the same time (for example the federal mortgage stress test in October 2016), there is one treated city, and the standard errors are unreliable with so few cities. The index also measures new-home prices only.
+
+## Repository layout
 
 ```
 R/
-  01_download.R     pull NHPI from Statistics Canada (cansim)
-  02_clean.R        filter CMAs and window, build treatment and relative-month variables
-  03_event_study.R  event study with fixest, saves figure and coefficients
-reports/
-  report.qmd        Quarto report (to be written)
-data/raw/           downloaded data (not tracked)
-data/processed/     analysis dataset (not tracked)
-outputs/figures/    figures
+  01_download.R       download the NHPI table from Statistics Canada
+  02_clean.R          build the analysis panels
+  03_event_study.R    main event study
+  04_raw_series.R     raw series and gap charts
+  05_robustness.R     robustness checks and HonestDiD sensitivity
+  06_data_quality.R   data quality flags and growth table
+  07_dot_plot.R       before/after growth chart
+  08_placebo_space.R  placebo in space
+reports/report.qmd    full report
+outputs/figures/      charts
 ```
 
-## Reproducing
+## Full report
+
+[Read the full report](TODO-add-GitHub-Pages-link-after-publishing)
+
+## Reproduce
 
 Requires R (4.3 or later) and Quarto.
 
 ```r
-install.packages(c("cansim", "dplyr", "lubridate", "stringr", "fixest", "broom", "ggplot2", "renv"))
-renv::init()   # first time only, then commit renv.lock
+install.packages(c("cansim", "dplyr", "lubridate", "stringr", "fixest", "broom",
+                   "ggplot2", "remotes"))
+remotes::install_github("asheshrambachan/HonestDiD")
 
 source("R/01_download.R")
 source("R/02_clean.R")
 source("R/03_event_study.R")
+source("R/05_robustness.R")
+source("R/07_dot_plot.R")
+source("R/08_placebo_space.R")
 ```
-
-Then render the report:
 
 ```
 quarto render reports/report.qmd
 ```
 
-## Status
+## AI assistance
 
-- [x] Repo scaffold
-- [x] Download script
-- [x] Cleaning script
-- [x] Event-study script (first draft)
-- [ ] Verify table and geography names against the live Statistics Canada table
-- [ ] Parallel-trends check and robustness (alternative controls, shorter window, placebo date)
-- [ ] Small-sample inference
-- [ ] Quarto report and GitHub Pages
+I used Claude  as a coding and methods assistant for this project, mainly for debugging R code. I made the design choices, ran all analyses, and am responsible for the results and conclusions.
+
