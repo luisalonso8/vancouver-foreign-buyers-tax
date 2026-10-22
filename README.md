@@ -104,5 +104,5 @@ quarto render reports/report.qmd
 
 ## AI assistance
 
-I used Claude  as a coding and methods assistant for this project, mainly for debugging R code. I made the design choices, ran all analyses, and am responsible for the results and conclusions.
+I used Claude  as a coding assistant for this project, mainly for debugging R code. I made the design choices, ran all analyses, and am responsible for the results and conclusions.
 
