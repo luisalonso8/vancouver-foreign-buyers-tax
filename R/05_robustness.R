@@ -7,6 +7,7 @@ library(fixest)
 library(ggplot2)
 library(broom)
 library(stringr)
+library(HonestDiD)
 
 panel <- readRDS(file.path("data", "processed", "panel.rds"))
 
@@ -78,3 +79,56 @@ ggsave(
   file.path("outputs", "figures", "gap_vancouver_victoria.png"),
   p_gap_bc, width = 8, height = 5, dpi = 200
 )
+
+# ---- Check 2: extended control set ------------------------------------------
+panel_ext <- readRDS(file.path("data", "processed", "panel_extended.rds"))
+
+es_ext <- feols(
+  log_nhpi ~ i(rel_month, treated, ref = -1) | cma + date,
+  data    = panel_ext,
+  cluster = ~cma
+)
+
+p_ext <- plot_event_study(es_ext, "Event study with extended control set")
+
+ggsave(
+  file.path("outputs", "figures", "event_study_extended.png"),
+  p_ext, width = 8, height = 5, dpi = 200
+)
+
+# ---- Check 4: HonestDiD sensitivity (Rambachan and Roth) --------------------
+b   <- coef(es_ext)
+s   <- vcov(es_ext)
+rel <- as.integer(str_extract(names(b), "-?\\d+"))
+
+# Use the last 12 pre-periods and all post-periods (periods must be consecutive)
+keep   <- which(rel >= -12)
+b_k    <- b[keep]
+s_k    <- s[keep, keep]
+n_pre  <- sum(rel[keep] < 0)
+n_post <- sum(rel[keep] >= 0)
+
+# Target: average effect over the post-tax months
+l_vec <- rep(1 / n_post, n_post)
+
+original <- constructOriginalCS(
+  betahat = b_k, sigma = s_k,
+  numPrePeriods = n_pre, numPostPeriods = n_post,
+  l_vec = l_vec
+)
+
+# Smoothness restriction: M = max change in slope between consecutive periods
+sens <- createSensitivityResults(
+  betahat = b_k, sigma = s_k,
+  numPrePeriods = n_pre, numPostPeriods = n_post,
+  Mvec  = seq(0, 0.01, length.out = 6),
+  l_vec = l_vec
+)
+print(sens)
+
+p_honest <- createSensitivityPlot(sens, original)
+ggsave(
+  file.path("outputs", "figures", "honest_did.png"),
+  p_honest, width = 8, height = 5, dpi = 200
+)
+write.csv(sens, file.path("outputs", "honest_did_results.csv"), row.names = FALSE)
