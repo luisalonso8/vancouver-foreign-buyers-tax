@@ -79,7 +79,7 @@ outputs/figures/      charts
 
 ## Full report
 
-[Read the full report](TODO-add-GitHub-Pages-link-after-publishing)
+[Read the full report](https://luisalonso8.github.io/vancouver-foreign-buyers-tax/)
 
 ## Reproduce
 
