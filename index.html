@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Luis Alonso Alvarez Portugal">
-<meta name="dcterms.date" content="2026-10-22">
+<meta name="dcterms.date" content="2026-10-25">
 
 <title>Did BC’s 2016 Foreign Buyers’ Tax change new-home prices in Vancouver?</title>
 <style>
@@ -2374,7 +2374,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 22, 2026</p>
+      <p class="date">October 25, 2026</p>
     </div>
   </div>
   
@@ -2415,7 +2415,7 @@ window.Quarto = {
 <p>I estimate an event study with two-way fixed effects (CMA and month):</p>
 <p><span class="math display">\[\log(\text{NHPI}_{it}) = \alpha_i + \lambda_t + \sum_{k \neq -1} \beta_k \, \mathbb{1}[\text{rel\_month}_t = k] \times \text{Treated}_i + \varepsilon_{it}\]</span></p>
 <p>There is one coefficient <span class="math inline">\(\beta_k\)</span> per month relative to the tax date, with July 2016 (<span class="math inline">\(k=-1\)</span>) as the reference month. Using logs means the coefficients read as approximate percentage changes. Standard errors are clustered by CMA.</p>
-<p>The identifying assumption is parallel trends: without the tax, Vancouver and the controls would have evolved in parallel. The pre-tax coefficients (<span class="math inline">\(k&lt;-1\)</span>) are the main evidence for or against it. With one treated unit and few controls, cluster-robust standard errors are unreliable <span class="citation" data-cites="bertrand2004">(<a href="#ref-bertrand2004" role="doc-biblioref">Bertrand, Duflo, and Mullainathan 2004</a>)</span>, so I supplement them with a placebo test and a sensitivity analysis.</p>
+<p>The identifying assumption is parallel trends: without the tax, Vancouver and the controls would have evolved in parallel. The pre-tax coefficients (<span class="math inline">\(k&lt;-1\)</span>) are the main evidence for or against it. Standard errors are clustered by CMA, which is robust to heteroskedasticity and to serial correlation within cities. With one treated unit and few clusters, however, cluster-robust standard errors are unreliable <span class="citation" data-cites="bertrand2004">(<a href="#ref-bertrand2004" role="doc-biblioref">Bertrand, Duflo, and Mullainathan 2004</a>)</span>, so I do not rely on them alone and supplement them with a placebo test and a sensitivity analysis.</p>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
