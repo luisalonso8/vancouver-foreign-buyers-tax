@@ -1,22 +1,22 @@
 # Did BC's 2016 Foreign Buyers' Tax change new-home prices in Vancouver?
 
-A small data project on a real policy question, using public Statistics Canada data and R.
+A small data project on a real policy question, source: public Statistics Canada data.
 
 ## The short answer
 
-**The data cannot tell.** Here is what they do show:
+**The data show in a non conclusive way** 
 
 - Before the tax, new-home prices in Vancouver were rising much faster than in other Canadian cities.
 - After the tax, that rise slowed sharply: the biggest slowdown among 12 cities.
 - But Vancouver was already on a different path before the tax. A slowdown from an unusually fast pace is not the same as an effect of the tax, and the numbers are compatible with anything from a sizeable drop to a modest rise.
 
-I report this as an inconclusive result and explain why, instead of forcing a headline.
+I report this as an inconclusive result and explain why.
 
 ## Background
 
-On 2 August 2016, British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated aim was to help manage foreign demand while new homes were built. The question here: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
+On 2 August 2016, British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated aim was to help manage foreign demand while new homes were built. The question: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
 
-## What the data show
+## What the data tell
 
 **1. Vancouver was growing much faster than other cities, then slowed.**
 Average monthly price growth in the 12 months before the tax versus the 8 months after. Vancouver (thick line) had the highest pace before and the largest slowdown after.
@@ -38,14 +38,14 @@ I pretended each of the other cities had received the tax and measured the same 
 
 ![Placebo in space](outputs/figures/placebo_space.png)
 
-## How I approached it
+## Approach
 
-- **Method:** difference-in-differences, in its event-study form. Vancouver's price path is compared with cities that did not get the tax, month by month, around the tax date.
+- **Method:** Difference-in-differences, in its event-study form. Vancouver's price path is compared with cities that did not get the tax, month by month, around the tax date.
 - **Data:** monthly New Housing Price Index (NHPI), Statistics Canada, Table 18-10-0205-01. January 2013 to March 2017. It covers new homes, not resale.
 - **Comparison cities:** Calgary, Edmonton, Saskatoon, Regina, Winnipeg and Halifax, extended to 11 cities in a robustness check.
-- **Why not an A/B test:** the tax already happened in one region, so assignment cannot be randomized.
+- **Why not an A/B test:** the tax already happened in one region, so assignment cannot be randomized. This is the best method to approach the question.
 
-## What I checked
+## Checks
 
 | Check | Result |
 |---|---|
@@ -55,11 +55,11 @@ I pretended each of the other cities had received the tax and measured the same 
 | Sensitivity to the pre-tax trend (HonestDiD) | Effect is negative only if the trend continues in a straight line; wide range otherwise |
 | Placebo in space (12 cities) | Largest slowdown of the 12, p = 0.083 (the minimum possible); no difference in price level relative to July 2016 |
 
-## What this analysis can and cannot say
+## Conclusions
 
-**It can say:** Vancouver's price growth slowed after the tax more than in any comparison city, and the pre-tax trend was not parallel.
+Vancouver's price growth slowed after the tax more than in any comparison city, and the pre-tax trend was not parallel.
 
-**It cannot say:** that the tax lowered prices, or that it had no effect. Other things changed at the same time (for example the federal mortgage stress test in October 2016), there is one treated city, and the standard errors are unreliable with so few cities. The index also measures new-home prices only.
+But it is not possible to establish that the tax lowered prices, or that it had no effect. Other things changed at the same time (for example the federal mortgage stress test in October 2016), there is one treated city, and the standard errors are unreliable with so few cities. The index also measures new-home prices only.
 
 ## Repository layout
 
