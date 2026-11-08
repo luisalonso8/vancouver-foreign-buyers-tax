@@ -1,20 +1,25 @@
-# Did BC's 2016 Foreign Buyers' Tax change new-home prices in Vancouver?
+# Did BC's 2016 Additional Property Transfer Tax under Bill 28 (Miscellaneous Statutes (Housing Priority Initiatives) Amendment Act, 2016) change new-home prices in Vancouver?
 
-A small data project on a real policy question, source: public Statistics Canada data.
+This is a data project on a real policy question: did 2016 Additional Property Tax (Foreignt Tax) changed the home prices in Vancouver? 
+Source: public Statistics Canada data.
 
-## The short answer
+On 2 August 2016, the government of British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated goal was to manage foreign demand while new homes were built. The question: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
 
-**The data show in a non conclusive way** 
+## Key Objectives of the policy
 
-- Before the tax, new-home prices in Vancouver were rising much faster than in other Canadian cities.
-- After the tax, that rise slowed sharply: the biggest slowdown among 12 cities.
-- But Vancouver was already on a different path before the tax. A slowdown from an unusually fast pace is not the same as an effect of the tax, and the numbers are compatible with anything from a sizeable drop to a modest rise.
+1) Curb foreign demand: To deter foreign nationals, foreign corporations, and taxable trustees from treating local residential real estate as a speculative investment.
+2) Cool quick price increases: To slow down the sharp, inflation-driven surge in home prices in high-demand regions like Metro Vancouver.
+3) Fund housing initiatives: To channel tax revenues collected from foreign purchases directly into a Housing Priority Initiatives special account to support affordable housing, rentals, and support programs.
+4) Discourage vacancies: When introduced via Bill 28, it also paved the way for municipal vacancy and empty homes taxes to push unused properties back into the long-term housing market.
 
-I report this as an inconclusive result and explain why.
+## Important aspects that data shows
 
-## Background
+- Before the tax, the new home prices in Vancouver were rising much faster than other cities in Canada.
+- After tax implementation, the increased slowed sharply which represented the biggest slowdown among 12 cities.
+- There is a main fact for this analysis: Vancouver was already on a different path than other places before the tax.
+- Prices were rising unusually fast before the tax, so a slowdown afterwards does not show that the tax caused it. The estimate is also too imprecise to tell: the interval runs from a large drop to a small rise.
 
-On 2 August 2016, British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated aim was to help manage foreign demand while new homes were built. The question: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
+I report this as an inconclusive result and explain the reasons why.
 
 ## What the data tell
 
@@ -28,22 +33,20 @@ Each dot is the gap between Vancouver and the controls, month by month, relative
 
 ![Event study](outputs/figures/event_study_main.png)
 
-**3. How much does that matter?**
-Each row asks: if Vancouver's pre-tax trend had bent by this much, what would the effect of the tax be? If the trend simply continued in a straight line, the tax looks like a small decline (about 1 to 3%). With the amount of bending seen in the data, the range runs from roughly -16% to +12%.
+**3. How sensitive is the result of the pre tax trend?**
+The estimate assumes that Vancouver’s prices would have kept following their pre-tax trend without the tax. Each row of the table relaxes that assumption by a different amount. If the trend had continued in a straight line, the estimated effect of the tax is a small decline of about 1 to 3%. If the trend could have changed by as much as it did before the tax, the estimate would range from about -16% to +12%.
 
 ![Sensitivity analysis](outputs/figures/honest_did.png)
 
-**4. Is Vancouver unusual compared with other cities?**
-I pretended each of the other cities had received the tax and measured the same slowdown. Vancouver's is the largest, but with only 12 cities the smallest possible p-value is 0.083.
+**4. Is Vancouver’s slowdown unusual compared with other cities?**
+I applied the tax date to each of the other 11 cities in turn and measured the same slowdown in each. Vancouver’s is the largest of the 12, which is suggestive. But with only 12 cities, the smallest possible p-value is 0.083, so this test cannot reach conventional significance even when Vancouver ranks first.
 
-![Placebo in space](outputs/figures/placebo_space.png)
+Method: Difference in Differences (DiD)
+DiD estimates the effect of a policy after it was introduced. I compare Vancouver’s price path with cities that did not get the tax, month by month, around the tax date.
 
-## Approach
-
-- **Method:** Difference-in-differences, in its event-study form. Vancouver's price path is compared with cities that did not get the tax, month by month, around the tax date.
-- **Data:** monthly New Housing Price Index (NHPI), Statistics Canada, Table 18-10-0205-01. January 2013 to March 2017. It covers new homes, not resale.
-- **Comparison cities:** Calgary, Edmonton, Saskatoon, Regina, Winnipeg and Halifax, extended to 11 cities in a robustness check.
-- **Why not an A/B test:** the tax already happened in one region, so assignment cannot be randomized. This is the best method to approach the question.
+Data: monthly New Housing Price Index (NHPI) from Statistics Canada, Table 18-10-0205-01, January 2013 to March 2017. It covers new homes, not resale.
+Comparison cities: Calgary, Edmonton, Saskatoon, Regina, Winnipeg and Halifax. A robustness check extends this to 11 cities.
+Why not a randomized experiment: the tax was introduced in one region, so I cannot assign it at random. DiD is the standard way to estimate an effect in this situation.
 
 ## Checks
 
@@ -104,5 +107,5 @@ quarto render reports/report.qmd
 
 ## AI assistance
 
-I used Claude  as a coding assistant for this project, mainly for debugging R code. I made the design choices, ran all analyses, and am responsible for the results and conclusions.
+I used Claude as a coding assistant for this project, mainly for debugging R code. 
 
