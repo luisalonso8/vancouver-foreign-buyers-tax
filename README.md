@@ -1,13 +1,14 @@
 # Did BC's 2016 Additional Property Transfer Tax under Bill 28 (Miscellaneous Statutes (Housing Priority Initiatives) Amendment Act, 2016) change new-home prices in Vancouver?
 
-This is a data project on a real policy question: did 2016 Additional Property Tax (Foreignt Tax) changed the home prices in Vancouver? 
-Source: public Statistics Canada data.
+This is a data project on the policy question: Did 2016 Additional Property Tax (Foreignt Tax) changed the home prices in Vancouver? 
 
-On 2 August 2016, the government of British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated goal was to manage foreign demand while new homes were built. The question: did new-home prices in Vancouver change relative to comparable cities that had no such tax?
+On  August 2016, the government of British Columbia introduced a 15% additional property transfer tax on foreign buyers in Metro Vancouver. The stated goal was to manage foreign demand while new homes were built. Did new-home prices in Vancouver change relative to comparable cities that had no such tax?
+
+Data source: Statistics Canada data.
 
 ## Key Objectives of the policy
 
-1) Curb foreign demand: To deter foreign nationals, foreign corporations, and taxable trustees from treating local residential real estate as a speculative investment.
+1) Limit foreign demand: To deter foreign nationals, foreign corporations, and taxable trustees from treating local residential real estate as a speculative investment.
 2) Cool quick price increases: To slow down the sharp, inflation-driven surge in home prices in high-demand regions like Metro Vancouver.
 3) Fund housing initiatives: To channel tax revenues collected from foreign purchases directly into a Housing Priority Initiatives special account to support affordable housing, rentals, and support programs.
 4) Discourage vacancies: When introduced via Bill 28, it also paved the way for municipal vacancy and empty homes taxes to push unused properties back into the long-term housing market.
@@ -19,7 +20,7 @@ On 2 August 2016, the government of British Columbia introduced a 15% additional
 - There is a main fact for this analysis: Vancouver was already on a different path than other places before the tax.
 - Prices were rising unusually fast before the tax, so a slowdown afterwards does not show that the tax caused it. The estimate is also too imprecise to tell: the interval runs from a large drop to a small rise.
 
-I report this as an inconclusive result and explain the reasons why.
+I report this as an inconclusive result and explain the reasons.
 
 ## What the data tell
 
@@ -105,7 +106,7 @@ source("R/08_placebo_space.R")
 quarto render reports/report.qmd
 ```
 
-## AI assistance
+
 
 I used Claude as a coding assistant for this project, mainly for debugging R code. 
 
